@@ -1,0 +1,119 @@
+import random
+import os
+
+# Categories with their own subjects/actions/places
+categories = {
+    "bollywood": {
+        "subjects": ["Shahrukh Khan", "Salman Khan", "Alia Bhatt", "Aamir Khan"],
+        "actions": ["launches", "cancels", "dances with", "celebrates", "argues with"],
+        "places": ["at Filmfare Awards", "in a new movie trailer", "at Bandra", "inside a movie set"]
+    },
+    "sports": {
+        "subjects": ["Virat Kohli", "MS Dhoni", "Cristiano Ronaldo", "A group of football fans"],
+        "actions": ["scores", "misses", "celebrates", "fights with", "declares retirement from"],
+        "places": ["during IPL match", "at Wankhede Stadium", "in FIFA World Cup", "inside the dressing room"]
+    },
+    "politics": {
+        "subjects": ["Prime Minister Modi", "Rahul Gandhi", "Nirmala Sitharaman", "A group of MPs"],
+        "actions": ["launches", "cancels", "orders", "declares war on", "discusses"],
+        "places": ["at Red Fort", "inside Parliament", "at India Gate", "during election rally"]
+    },
+    "animals": {
+        "subjects": ["A Mumbai Cat", "A group of Monkeys", "A Delhi Dog", "A Street Cow"],
+        "actions": ["eats", "fights with", "dances with", "celebrates", "chases"],
+        "places": ["in a plate of samosa", "at Ganga Ghat", "in Mumbai Local Train", "near Connaught Place"]
+    },
+    "random": {
+        "subjects": ["Auto Rickshaw Driver from Delhi", "A college student", "A software engineer", "A teacher"],
+        "actions": ["launches", "cancels", "celebrates", "orders", "dances with"],
+        "places": ["in a chai stall", "during a traffic jam", "inside a metro", "in a wedding hall"]
+    },
+    "technology": {
+        "subjects": ["Elon Musk", "Bill Gates", "Mark Zuckerberg", "A frustrated coder"],
+        "actions": ["launches", "deletes", "crashes", "hacks", "upgrades"],
+        "places": ["in Silicon Valley", "at Twitter HQ", "during a live stream", "inside a server room"]
+    },
+    "science": {
+        "subjects": ["NASA scientist", "ISRO engineer", "A crazy physicist", "A robot"],
+        "actions": ["discovers", "invents", "destroys", "experiments with", "publishes"],
+        "places": ["inside a secret lab", "on Mars", "in Antarctica", "at CERN"]
+    },
+    "education": {
+        "subjects": ["A school principal", "A college student", "An IIT professor", "A coaching teacher"],
+        "actions": ["cancels", "introduces", "fails", "passes", "lectures"],
+        "places": ["during an exam", "inside the classroom", "in the library", "at the canteen"]
+    },
+    "food": {
+        "subjects": ["A street vendor", "A food blogger", "A chef", "A hungry student"],
+        "actions": ["eats", "cooks", "burns", "launches", "orders"],
+        "places": ["in a plate of samosa", "at Pizza Hut", "inside a 5-star hotel", "on Zomato app"]
+    },
+    "space": {
+        "subjects": ["NASA", "ISRO", "Aliens", "An astronaut"],
+        "actions": ["launches", "discovers", "lands on", "attacks", "celebrates"],
+        "places": ["on the Moon", "on Mars", "inside a spaceship", "in the International Space Station"]
+    }
+}
+
+# File to save headlines
+file_name = "fake_news.txt"
+
+while True:
+    print("\nOptions:")
+    print("1. Generate random headline from category")
+    print("2. Create personalized headline with your input")
+    print("3. Exit")
+
+    choice = input("Choose an option (1/2/3): ").strip()
+
+    if choice == "3":
+        break
+
+    if choice == "1":
+        # Show categories
+        print("\nAvailable categories:")
+        for cat in categories.keys():
+            
+            print("-", cat.capitalize())
+
+        category = input("Choose a category: ").strip().lower()
+
+        if category not in categories:
+            print("❌ Invalid category! Please choose again.")
+            continue
+
+        # Generate headline
+        subjects = random.choice(categories[category]["subjects"])
+        actions = random.choice(categories[category]["actions"])
+        places = random.choice(categories[category]["places"])
+        
+        headline = f"BREAKING NEWS: {subjects} {actions} {places}"
+
+    elif choice == "2":
+        # Personalized headline
+        subject = input("Enter a name/person/profession (example: Vini, Teacher, Dog): ").strip()
+        action = input("Enter an action (or press Enter for random): ").strip()
+        place = input("Enter a place/thing (or press Enter for random): ").strip()
+
+        # Random fallback if not entered
+        if not action:
+            action = random.choice(random.choice(list(categories.values()))["actions"])
+        if not place:
+            place = random.choice(random.choice(list(categories.values()))["places"])
+
+        headline = f"BREAKING NEWS: {subject} {action} {place}"
+
+    else:
+        print("❌ Invalid option! Try again.")
+        continue
+
+    # Print headline
+    print("\n📰 " + headline)
+
+    # Ask if user wants to save
+    save_choice = input("Do you want to save this headline? (yes/no): ").strip().lower()
+    if save_choice == "yes":
+        with open(file_name, "a") as f:
+            f.write(headline + "\n")
+        print(f"✅ Headline saved to {file_name}")
+ 
