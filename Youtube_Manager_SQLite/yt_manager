@@ -1,0 +1,75 @@
+import sqlite3
+
+conn=sqlite3.connect('youtube_videos.db')
+
+cursor=conn.cursor()
+
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS videos(
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL,
+        time TEXT NOT NULL   
+    )''')
+
+def list_all_videos():
+    cursor.execute("SELECT * FROM videos") #it return a tuple so we have to use loop to get value
+    for row in cursor.fetchall():
+        print(row)
+
+
+def add_video(name, time):
+    cursor.execute("INSERT INTO videos (name ,time) VALUES (?,?)", (name,time))
+    conn.commit()
+
+def update_video(video_id, new_name, new_time):
+    cursor.execute("UPDATE videos SET name=?, time=? WHERE id=?", (new_name, new_time, video_id))
+    conn.commit()
+
+def delete_video(video_id):
+    cursor.execute("DELETE FROM videos WHERE id=?",(video_id,)) # this , is compulsory here than only it will go in tuple and only a tuple is accepted here
+    conn.commit()
+
+def main():
+    while True:
+        print("\n Youtube Manager with DB | choose an option")
+        print("\n 1. List all Youtube video")
+        print("\n 2. Add a Youtube video")    
+        print("\n 3. Update Youtube video Detail")
+        print("\n 4. Delete Youtube video")
+        print("\n 5. Exit App")
+        choice = input("Enter your choice: ")
+
+        if choice=='1':
+            list_all_videos()
+
+        elif choice == '2':
+            name=input("Enter the video name: ")
+            time=input("Enter the video time: ")
+            add_video(name, time)
+
+        elif choice == '3':
+            list_all_videos()
+            video_id=input("Enter video ID to update: ")
+            name=input("Enter the video name: ")
+            time=input("Enter the video time: ")
+            update_video(video_id,name, time)
+
+        elif choice== '4':
+            list_all_videos()
+            video_id=input("Enter video ID to delete: ")
+            delete_video(video_id)
+
+        elif choice == '5':
+            break
+        
+        else:
+            print("Invalid Choice")
+
+    conn.close()
+    #it is used so that our database doesn't get corrupt
+
+if __name__== "__main__":
+    main()
+
+
+    
